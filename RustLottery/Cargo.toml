@@ -1,0 +1,8 @@
+[package]
+name = "RustLottery"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+calamine = "0.24.0"
+office = "0.8.1"

@@ -1,12 +1,14 @@
 package main
 
-import "GoLottery/Algos"
+import (
+	"GoLottery/Algos/MultiThread"
+)
 
 func main() {
 	println("just a test")
-	Algos.LoadUsersExcel("D://lottery.xlsx")
-	Algos.MakePlainUsers()
-	result := Algos.RunLottery()
+	MultiThread.LoadUsersExcel("D://lottery.xlsx")
+	MultiThread.MakePlainUsers()
+	result := MultiThread.RunLottery()
 
 	for _, value := range result {
 

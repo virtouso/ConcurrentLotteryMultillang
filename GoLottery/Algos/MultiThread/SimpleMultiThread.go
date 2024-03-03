@@ -1,4 +1,4 @@
-package Algos
+package MultiThread
 
 import (
 	"GoLottery/Models"
@@ -27,35 +27,39 @@ func LoadUsersExcel(dir string) {
 
 		for _, row := range sheet.Rows {
 
-			counter := 0
-			name := ""
-			number := ""
-			var chance int64 = 0
-			for _, cell := range row.Cells {
+			go func() {
 
-				value, err := cell.FormattedValue()
-				if err != nil {
-					log.Printf("Error getting value from cell: %v", err)
-					continue
+				counter := 0
+				name := ""
+				number := ""
+				var chance int64 = 0
+				for _, cell := range row.Cells {
+
+					value, err := cell.FormattedValue()
+					if err != nil {
+						log.Printf("Error getting value from cell: %v", err)
+						continue
+					}
+
+					if counter == 0 {
+						name = value
+					} else if counter == 1 {
+						number = value
+					} else {
+						chance, _ = strconv.ParseInt(value, 10, 64)
+					}
+
+					counter++
+
 				}
 
-				if counter == 0 {
-					name = value
-				} else if counter == 1 {
-					number = value
-				} else {
-					chance, _ = strconv.ParseInt(value, 10, 64)
-				}
+				users = append(users, Models.User{
+					Name:        name,
+					PhoneNumber: number,
+					Chance:      chance,
+				})
 
-				counter++
-				//fmt.Printf("%s\t", value)
-			}
-
-			users = append(users, Models.User{
-				Name:        name,
-				PhoneNumber: number,
-				Chance:      chance,
-			})
+			}()
 
 		}
 	}
@@ -65,10 +69,12 @@ func MakePlainUsers() {
 
 	plainUsers = make([]Models.User, 0, len(users))
 	for _, value := range users {
+
 		var i int64 = 0
 		for i = 0; i < value.Chance; i++ {
 			plainUsers = append(plainUsers, value)
 		}
+
 	}
 }
 
@@ -81,12 +87,13 @@ func RunLottery() []Models.User {
 
 	for len(winners) < count {
 
-		random := rand.Intn(len(plainUsers))
+		go func() {
+			random := rand.Intn(len(plainUsers))
 
-		if containsNumber(winners, plainUsers[random].PhoneNumber) {
-			continue
-		}
-		winners = append(winners, plainUsers[random])
+			if !containsNumber(winners, plainUsers[random].PhoneNumber) {
+				winners = append(winners, plainUsers[random])
+			}
+		}()
 	}
 
 	return winners
@@ -94,6 +101,7 @@ func RunLottery() []Models.User {
 
 func containsNumber(people []Models.User, number string) bool {
 	for _, p := range people {
+		
 		if p.PhoneNumber == number {
 			return true
 		}
