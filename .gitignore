@@ -1,0 +1,5 @@
+*.recipe
+*.txt
+*.idb
+*.tlog
+*.lastbuildstate

@@ -1,0 +1,31 @@
+# Ignore build artifacts
+build/
+.idea/
+bin/
+*.o
+*.obj
+*.exe
+
+# Ignore generated files
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Ignore IDE/project files
+.vscode/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.xcodeproj/
+*.cbp
+*.workspace
+*.layout
+*.depend
+*.user
+*.suo
+*.sdf
+
+# Ignore dependency management files
+vendor/
