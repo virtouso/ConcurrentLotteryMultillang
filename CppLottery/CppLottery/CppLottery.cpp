@@ -1,14 +1,31 @@
 #include <iostream>
 
+
 #include "algos/MultiThread.h"
 #include "algos/SingleThread.h"
 
-int main(int argc, char* argv[])
+
+void Single()
+{
+    auto single = SingleThread();
+    single.ReadExcel("D://lottery.xlsx");
+    single.MakePlainUsers();
+    single.RunLottery(200);
+}
+
+
+
+void Multi()
 {
     auto single = MultiThread();
     single.ReadExcel("D://lottery.xlsx");
     single.MakePlainUsers();
     single.RunLottery(200);
-    std::cout << single.Winners.size();
+}
+
+
+int main(int argc, char* argv[])
+{
+    
     return 0;
 }
